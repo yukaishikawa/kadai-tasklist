@@ -21,7 +21,7 @@ class TasksController extends Controller
         
         $data = [
             'user' => $user,
-            'task' => $tasks,
+            'tasks' => $tasks,
             ];
             
         return view('tasks.index', [
@@ -69,45 +69,43 @@ class TasksController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+  
     public function show($id)
     {
-         $task = Task::find($id);
+    $task = Task::find($id);
+    if (\Auth::id() === $task->user_id) {
 
         return view('tasks.show', [
             'task' => $task,
         ]);
-
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    else{
+    return redirect('/');
+    
+        }
+    }
+    
+    
+    
+    
     public function edit($id)
     {
-        $task = Task::find($id);
+    $task = Task::find($id);
+     if (\Auth::id() === $task->user_id) {
 
         return view('tasks.edit', [
             'task' => $task,
-        ]);
-
+            ]);
+     }
+     
+    else{
+    return redirect('/');
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function update(Request $request, $id)
     {
          $this->validate($request, [
@@ -124,12 +122,8 @@ class TasksController extends Controller
 
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+ 
+ 
     public function destroy($id)
     {
         $task = Task::find($id);
